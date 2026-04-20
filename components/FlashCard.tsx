@@ -8,6 +8,14 @@ function speak(text: string, lang = "en-US") {
   const utter = new SpeechSynthesisUtterance(text);
   utter.lang = lang;
   utter.rate = lang === "zh-CN" ? 0.9 : 0.85;
+
+  // Try to get a high-quality English voice
+  const voices = window.speechSynthesis.getVoices();
+  const enVoice = voices.find(v =>
+    v.lang.startsWith("en") && (v.name.includes("English") || v.name.includes("US") || v.name.includes("Premium") || v.name.includes("Samantha") || v.name.includes("Daniel"))
+  );
+  if (enVoice) utter.voice = enVoice;
+
   window.speechSynthesis.speak(utter);
 }
 

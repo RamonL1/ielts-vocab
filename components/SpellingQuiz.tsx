@@ -20,6 +20,14 @@ function speak(text: string) {
   const utter = new SpeechSynthesisUtterance(text);
   utter.lang = "en-US";
   utter.rate = 0.9;
+
+  // Try to get a high-quality English voice
+  const voices = window.speechSynthesis.getVoices();
+  const enVoice = voices.find(v =>
+    v.lang.startsWith("en") && (v.name.includes("English") || v.name.includes("US") || v.name.includes("Premium") || v.name.includes("Samantha") || v.name.includes("Daniel"))
+  );
+  if (enVoice) utter.voice = enVoice;
+
   window.speechSynthesis.speak(utter);
 }
 
