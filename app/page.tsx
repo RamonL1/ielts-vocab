@@ -752,6 +752,17 @@ export default function HomePage() {
               </span>
             </div>
           </Link>
+          <Link href="/review" style={{ textDecoration: "none", flex: 1 }}>
+            <div style={{
+              display: "flex", flexDirection: "column", alignItems: "center", gap: 2,
+              padding: "8px 0", color: "var(--text3)",
+            }}>
+              <span style={{ fontSize: 22, opacity: 0.5 }}>🔁</span>
+              <span style={{ fontSize: 10, fontWeight: 400, letterSpacing: 0.3 }}>
+                复习
+              </span>
+            </div>
+          </Link>
         </div>
       </div>
     </div>
