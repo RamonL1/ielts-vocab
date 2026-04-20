@@ -3,20 +3,23 @@ import { useState, useEffect } from "react";
 import { Word } from "@/data/words";
 
 function speak(text: string, lang = "en-US") {
-  if (typeof window === "undefined" || !window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.lang = lang;
-  utter.rate = lang === "zh-CN" ? 0.9 : 0.85;
+  if (typeof window === "undefined") return;
 
-  // Try to get a high-quality English voice
-  const voices = window.speechSynthesis.getVoices();
-  const enVoice = voices.find(v =>
-    v.lang.startsWith("en") && (v.name.includes("English") || v.name.includes("US") || v.name.includes("Premium") || v.name.includes("Samantha") || v.name.includes("Daniel"))
-  );
-  if (enVoice) utter.voice = enVoice;
+  // Use Google TTS for better quality
+  const langCode = lang === "zh-CN" ? "zh-CN" : "en";
+  const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=${langCode}&client=tw-ob`;
 
-  window.speechSynthesis.speak(utter);
+  const audio = new Audio(url);
+  audio.play().catch(() => {
+    // Fallback to browser TTS if Google TTS fails
+    if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = lang;
+      utter.rate = lang === "zh-CN" ? 0.9 : 0.85;
+      window.speechSynthesis.speak(utter);
+    }
+  });
 }
 
 interface Props {

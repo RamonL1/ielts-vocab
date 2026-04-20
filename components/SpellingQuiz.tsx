@@ -15,20 +15,22 @@ interface Props {
 type Phase = "answering" | "correct" | "wrong" | "done" | "skip";
 
 function speak(text: string) {
-  if (typeof window === "undefined" || !window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.lang = "en-US";
-  utter.rate = 0.9;
+  if (typeof window === "undefined") return;
 
-  // Try to get a high-quality English voice
-  const voices = window.speechSynthesis.getVoices();
-  const enVoice = voices.find(v =>
-    v.lang.startsWith("en") && (v.name.includes("English") || v.name.includes("US") || v.name.includes("Premium") || v.name.includes("Samantha") || v.name.includes("Daniel"))
-  );
-  if (enVoice) utter.voice = enVoice;
+  // Use Google TTS for better quality
+  const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=en&client=tw-ob`;
 
-  window.speechSynthesis.speak(utter);
+  const audio = new Audio(url);
+  audio.play().catch(() => {
+    // Fallback to browser TTS if Google TTS fails
+    if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = "en-US";
+      utter.rate = 0.9;
+      window.speechSynthesis.speak(utter);
+    }
+  });
 }
 
 function SpeakerBtn({ onClick, active, color }: { onClick: () => void; active: boolean; color: string }) {
