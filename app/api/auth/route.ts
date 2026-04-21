@@ -1,7 +1,7 @@
 // Next.js API Route for auth
-const SUPABASE_URL = "https://ilrreynuygmxarptaymn.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscnJleW51eWdteGFycHRheW1uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyMzY2NjMsImV4cCI6MjA5MTgxMjY2M30.t2CaMA85sNctOyg_3Rjqcb2h8ds7NJahqhtO0CMAJFE";
-const ADMIN_SECRET = "ramon123";
+const SUPABASE_URL = process.env.SUPABASE_URL || "https://ilrreynuygmxarptaymn.supabase.co";
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscnJleW51eWdteGFycHRheW1uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcxMjE4MDAsImV4cCI6MjA2MjY5NzgwMH0.KkQX4JN4e1WmK4xkOgZo4eWkJxT5W-V9oXRGzpvKmHU";
+const ADMIN_SECRET = process.env.ADMIN_SECRET || "ramon123";
 
 async function sf(method: string, path: string, body?: unknown) {
   const url = `${SUPABASE_URL}/rest/v1/${path}`;
