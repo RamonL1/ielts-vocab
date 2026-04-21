@@ -5,21 +5,38 @@ import { Word } from "@/data/words";
 function speak(text: string, lang = "en-US") {
   if (typeof window === "undefined") return;
 
-  // Use Google TTS for better quality
-  const langCode = lang === "zh-CN" ? "zh-CN" : "en";
-  const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=${langCode}&client=tw-ob`;
+  // Try multiple TTS sources for better compatibility
+  const tryUrls = [
+    // Youdao TTS (high quality, reliable)
+    `https://dict.youdao.com/dictvoice?type=1&audio=${encodeURIComponent(text)}`,
+    // Google TTS
+    `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=en&client=tw-ob`,
+  ];
 
-  const audio = new Audio(url);
-  audio.play().catch(() => {
-    // Fallback to browser TTS if Google TTS fails
-    if (window.speechSynthesis) {
-      window.speechSynthesis.cancel();
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.lang = lang;
-      utter.rate = lang === "zh-CN" ? 0.9 : 0.85;
-      window.speechSynthesis.speak(utter);
+  const tryPlay = (index = 0) => {
+    if (index >= tryUrls.length) {
+      // Fallback to browser TTS
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = lang;
+        utter.rate = lang === "zh-CN" ? 0.9 : 0.85;
+        // Try to find a better voice
+        const voices = window.speechSynthesis.getVoices();
+        const enVoice = voices.find(v =>
+          v.lang.startsWith("en") && (v.name.includes("English") || v.name.includes("US") || v.name.includes("Premium") || v.name.includes("Samantha"))
+        );
+        if (enVoice) utter.voice = enVoice;
+        window.speechSynthesis.speak(utter);
+      }
+      return;
     }
-  });
+
+    const audio = new Audio(tryUrls[index]);
+    audio.play().catch(() => tryPlay(index + 1));
+  };
+
+  tryPlay();
 }
 
 interface Props {
