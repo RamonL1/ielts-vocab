@@ -3,5 +3,5 @@ compatibility_date = "2024-01-01"
 pages_build_output_dir = ".next"
 
 [vars]
-SUPABASE_URL = "https://ilrreynuygmxarptaymn.supabase.co"
-SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscnJleW51eWdteGFycHRheW1uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyMzY2NjMsImV4cCI6MjA5MTgxMjY2M30.t2CaMA85sNctOyg_3Rjqcb2h8ds7NJahqhtO0CMAJFE"
+NEXT_PUBLIC_SUPABASE_URL = "https://ilrreynuygmxarptaymn.supabase.co"
+NEXT_PUBLIC_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscnJleW51eWdteGFycHRheW1uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcxMjE4MDAsImV4cCI6MjA2MjY5NzgwMH0.KkQX4JN4e1WmK4xkOgZo4eWkJxT5W-V9oXRGzpvKmHU"
