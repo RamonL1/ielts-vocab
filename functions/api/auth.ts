@@ -111,10 +111,20 @@ function calcExpiresAt(plan: string, existing?: string | null): Date {
   return base;
 }
 
-export async function onRequest({ request }: { request: Request }) {
-  if (request.method === "OPTIONS") return makeRes(204, null);
-  if (request.method !== "POST") return makeRes(405, { error: "Method not allowed" });
+// 1. 专门处理跨域预检请求 (OPTIONS)
+export async function onRequestOptions() {
+  return new Response(null, {
+    status: 204,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "content-type",
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
+    }
+  });
+}
 
+// 2. 专门处理你的 POST 接口逻辑
+export async function onRequestPost({ request }: { request: Request }) {
   const ip = getClientIP(request);
 
   try {
