@@ -95,12 +95,15 @@ export default function ReviewPage() {
     };
   });
 
-  const wordToTopicId = Object.fromEntries(
-    wrongList.map((entry) => [entry.word, entry.topicId])
-  );
+  const getTopicIdForWord = (word: string) => {
+    for (const entry of wrongList) {
+      if (entry.word === word) return entry.topicId;
+    }
+    return "review";
+  };
 
   const handleCorrect = (word: string) => {
-    const tid = wordToTopicId[word] ?? "review";
+    const tid = getTopicIdForWord(word);
     setWordProgress(tid, word, true, true);
     recordXP();
   };
@@ -254,7 +257,7 @@ export default function ReviewPage() {
               topicId="review"
               onCorrect={handleCorrect}
               onWrong={handleWrong}
-              getWordTopicId={(word) => wordToTopicId[word] ?? "review"}
+              getWordTopicId={getTopicIdForWord}
               accentColor={accentColor}
             />
           </div>
